@@ -1,0 +1,242 @@
+#include <iostream>
+#include <string>
+#include <fstream>
+#include<iomanip>
+using namespace std;
+const int n_crs = 6;
+const int n_stu = 1;
+const int n_crs_f = 10;
+const int g = 30;
+
+struct courses {
+    string name;
+    string code;
+    int hour;
+    string pre;
+};
+
+struct student {
+    string name;
+    int id;
+    int year;
+    string type;
+    courses crs[n_crs];
+};
+
+
+student transcript_1[n_stu];
+courses course_100[n_crs_f];
+courses course_200[n_crs_f];
+courses course_300[n_crs_f];
+courses course_400[n_crs_f];
+
+void Get_student_data() {
+    cout << "Enter your name" << endl;
+    cin.ignore();
+    getline(cin, transcript_1[0].name);
+
+    cout << "Enter your id" << endl;
+    cin >> transcript_1[0].id;
+
+    cout << "Enter your year" << endl;
+    cin >> transcript_1[0].year;
+
+    cout << "Enter your type of year " << endl;
+    cin.ignore();
+    getline(cin, transcript_1[0].type);
+    ifstream transcriptt("transcript.txt");
+    if (!transcriptt.is_open()) {
+        cerr << "Error opening transcript.txt" << endl;
+        return;
+    }
+
+    int i = 0;
+    string hour;
+    while (i < n_crs && getline(transcriptt, transcript_1[0].crs[i].name)) {
+        getline(transcriptt, transcript_1[0].crs[i].code);
+        getline(transcriptt, hour);
+        transcript_1[0].crs[i].hour = stoi(hour);
+        getline(transcriptt, transcript_1[0].crs[i].pre);
+        i++;
+    }
+
+    transcriptt.close();
+}
+
+void Get_courses_data_1() {
+    ifstream course_1("course_1.txt");
+    if (!course_1.is_open()) {
+        cout << "Error opening course_1.txt" << endl;
+        return;
+    }
+
+    int i = 0;
+    string hour_str;
+    while (i < n_crs_f && getline(course_1, course_100[i].name)) {
+        getline(course_1, course_100[i].code);
+        getline(course_1, hour_str);
+        course_100[i].hour = stoi(hour_str);
+        getline(course_1, course_100[i].pre);
+        i++;
+    }
+
+    course_1.close();
+}
+void Get_courses_data_2() {
+    ifstream course_2("course_2.txt");
+    if (!course_2.is_open()) {
+        cout << "Error opening course_2.txt" << endl;
+        return;
+    }
+
+    int i = 0;
+    string hour_str;
+    while (i < n_crs_f && getline(course_2, course_200[i].name)) {
+        getline(course_2, course_200[i].code);
+        getline(course_2, hour_str);
+        course_200[i].hour = stoi(hour_str);
+        getline(course_2, course_200[i].pre);
+        i++;
+    }
+
+    course_2.close();
+}
+void Get_courses_data_3() {
+    ifstream course_3("course_3.txt");
+    if (!course_3.is_open()) {
+        cout << "Error opening course_3.txt" << endl;
+        return;
+    }
+
+    int i = 0;
+    string hour_str;
+    while (i < n_crs_f && getline(course_3, course_300[i].name)) {
+        getline(course_3, course_300[i].code);
+        getline(course_3, hour_str);
+        course_300[i].hour = stoi(hour_str);
+        getline(course_3, course_300[i].pre);
+        i++;
+    }
+
+    course_3.close();
+}
+
+void Get_courses_data_4() {
+    ifstream course_4("course_4.txt");
+    if (!course_4.is_open()) {
+        cout << "Error opening course_4.txt" << endl;
+        return;
+    }
+
+    int i = 0;
+    string hour_str;
+    while (i < n_crs_f && getline(course_4, course_400[i].name)) {
+        getline(course_4, course_400[i].code);
+        getline(course_4, hour_str);
+        course_400[i].hour = stoi(hour_str);
+        getline(course_4, course_400[i].pre);
+        i++;
+    }
+
+    course_4.close();
+}
+
+int totall() {
+    int total = 0;
+    int i = 0;
+    while (i < n_crs) {
+        total = total + transcript_1[0].crs[i].hour;
+        i++;
+    }
+    return total;
+}
+
+void check(int total) {
+    ofstream advise("ADVISE CENTER.txt");
+    bool check;
+    if (total <= 33) {
+        for (int i = 0; i < n_crs; i++) {
+            check = false;
+            for (int j = 0; j < n_crs_f; j++) {
+                if (course_100[j].code != transcript_1[0].crs[i].code &&
+                    (course_100[j].pre == transcript_1[0].crs[i].code ||
+                        course_100[j].pre == "no_pre" ||
+                        course_100[j].pre == "-")) {
+                    advise << course_100[j].name << setw(g) << course_100[j].code << setw(g)
+                        << course_100[j].hour << setw(g) << course_100[j].pre << endl;
+                    check = true;
+                }
+            }
+            if (check) break;
+        }
+    }
+    else if (total >= 33 && total <= 69) {
+        for (int i = 0; i < n_crs; i++) {
+            check = false;
+            for (int j = 0; j < n_crs_f; j++) {
+                if (course_200[j].code != transcript_1[0].crs[i].code &&
+                    (course_200[j].pre == transcript_1[0].crs[i].code ||
+                        course_200[j].pre == "no_pre" ||
+                        course_200[j].pre == "-")) {
+                    advise << course_200[j].name << setw(g) << course_200[j].code << setw(g)
+                        << course_200[j].hour << setw(g) << course_200[j].pre << endl;
+                    check = true;
+                }
+            }
+            if (check) break;
+        }
+    }
+    else if (total >= 69 && total <= 101) {
+        for (int i = 0; i < n_crs; i++) {
+            check = false;
+            for (int j = 0; j < n_crs_f; j++) {
+                if (course_300[j].code != transcript_1[0].crs[i].code &&
+                    (course_300[j].pre == transcript_1[0].crs[i].code ||
+                        course_300[j].pre == "no_pre" ||
+                        course_300[j].pre == "-")) {
+                    advise << course_300[j].name << setw(g) << course_300[j].code << setw(g)
+                        << course_300[j].hour << setw(g) << course_300[j].pre << endl;
+                    check = true;
+                }
+            }
+            if (check) break;
+        }
+    }
+    else {
+        for (int i = 0; i < n_crs; i++) {
+            check = false;
+            for (int j = 0; j < n_crs_f; j++) {
+                if (course_400[j].code != transcript_1[0].crs[i].code &&
+                    (course_400[j].pre == transcript_1[0].crs[i].code ||
+                        course_400[j].pre == "no_pre" ||
+                        course_400[j].pre == "-")) {
+                    advise << course_400[j].name << setw(g) << course_400[j].code << setw(g)
+                        << course_400[j].hour << setw(g) << course_400[j].pre << endl;
+                    check = true;
+                }
+            }
+            if (check) break;
+        }
+    }
+    advise.close();
+}
+int main() {
+    Get_student_data();
+
+    Get_courses_data_1();
+
+    Get_courses_data_2();
+
+    Get_courses_data_3();
+
+    Get_courses_data_4();
+
+    int total = totall();
+
+    check(total);
+
+    cout << "Our advice for your next cources are in the file " << endl << "Thank you for using our program";
+
+
+    return 0;
+}
